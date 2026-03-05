@@ -2,124 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CDACC TVET System - DB Ready</title>
-    <style>
-        /* Modern TVET Blue Theme */
-        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
-        .card { max-width: 600px; margin: auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .form-group { margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 4px; }
-        .btn { width: 100%; padding: 12px; background: #003366; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn:hover { background: #004080; }
-        .admin-box { margin-top: 20px; text-align: center; border-top: 1px solid #eee; padding-top: 15px; }
-        #status { color: green; font-weight: bold; margin-top: 10px; text-align: center; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDAAC PoE - The Vibe Car</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/models/coco-ssd"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="cockpit">
+        <header>
+            <h1>CDAAC: AUTOMATED POE SYSTEM</h1>
+            <p>Reality Check Status: <span id="reality-status">WAITING... (대기 중)</span></p>
+        </header>
 
-<div class="card">
-    <h2 style="color: #003366; text-align: center;">CDACC Evidence Portal</h2>
-    
-    <div class="form-group">
-        <label>Admin No:</label>
-        <input type="text" id="adminNo" placeholder="Enter Admission Number">
+        <main class="grid">
+            <section class="video-feed">
+                <div class="monitor">
+                    <video id="webcam" autoplay muted playsinline></video>
+                    <div class="scanline"></div>
+                </div>
+                <div class="controls">
+                    <input type="file" id="manualUpload" accept="video/*">
+                    <button onclick="startAuto()">START SYSTEM (시작)</button>
+                </div>
+            </section>
+
+            <section class="quiz-panel">
+                <h3>Automated Assessment (자동 평가)</h3>
+                <div class="quiz-item">
+                    <label>PoE Verified: </label>
+                    <input type="checkbox" id="poeCheck" disabled>
+                </div>
+                <div class="log-box" id="eventLog">
+                    <p>[SYSTEM] Booting... (부팅 중)</p>
+                </div>
+            </section>
+        </main>
     </div>
-
-    <div class="form-group">
-        <label>Evidence Type:</label>
-        <select id="evidenceType">
-            <option value="live">Live Recording</option>
-            <option value="manual">Manual Upload</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>Title/Description:</label>
-        <input type="text" id="title" placeholder="e.g. Practical Assessment 1">
-    </div>
-
-    <div class="form-group">
-        <label>Evidence Photo:</label>
-        <input type="file" id="photo" accept="image/*">
-    </div>
-
-    <button class="btn" onclick="handleSubmit()">SUBMIT EVIDENCE</button>
-    <div id="status"></div>
-
-    <div class="admin-box">
-        <button onclick="adminAccess()" style="background: none; border: none; color: #666; cursor: pointer;">Admin Access</button>
-    </div>
-</div>
-
-<script>
-    /**
-     * CENTRAL DATA HANDLER
-     * This function manages the "Input/Output" flow.
-     */
-    async function handleSubmit() {
-        const status = document.getElementById('status');
-        
-        // Collect Data
-        const evidenceData = {
-            adminNo: document.getElementById('adminNo').value,
-            type: document.getElementById('evidenceType').value,
-            title: document.getElementById('title').value,
-            timestamp: new Date().toISOString()
-        };
-
-        if (!evidenceData.adminNo || !evidenceData.title) {
-            alert("Please fill in required fields.");
-            return;
-        }
-
-        // START OF AUTOMATION LOGIC
-        status.innerText = "Processing...";
-
-        // Step 1: Save locally for now
-        saveToLocalStorage(evidenceData);
-
-        // Step 2: FUTURE DATABASE LINK
-        // When you have your SQL Server ready, you will uncomment the line below:
-        // await sendToSQLServer(evidenceData);
-
-        status.innerText = "✅ Evidence Logged Successfully!";
-    }
-
-    /**
-     * DATABASE BRIDGE FUNCTION
-     * Keep this ready for when you link your SQL/Node.js backend.
-     */
-    async function sendToSQLServer(data) {
-        /* 
-        const response = await fetch('http://your-server-ip/api/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        return response.json();
-        */
-        console.log("SQL Bridge Ready: Data would be sent to server here.");
-    }
-
-    // Local storage fallback so the system works TODAY
-    function saveToLocalStorage(data) {
-        let logs = JSON.parse(localStorage.getItem('tvet_db') || '[]');
-        logs.push(data);
-        localStorage.setItem('tvet_db', JSON.stringify(logs));
-        console.log("Saved to Browser Memory:", data);
-    }
-
-    // Admin Access Simulation
-    function adminAccess() {
-        const pin = prompt("Enter Admin PIN:");
-        if (pin === "254") {
-            const data = localStorage.getItem('tvet_db');
-            alert("Current DB Records:\n" + (data ? data : "No records found."));
-        } else {
-            alert("Access Denied.");
-        }
-    }
-</script>
-
+    <script src="app.js"></script>
 </body>
 </html>

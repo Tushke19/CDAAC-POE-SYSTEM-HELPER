@@ -1,0 +1,10 @@
+body { background: #0d0d0d; color: #00ff41; font-family: 'Courier New', Courier, monospace; margin: 0; }
+.cockpit { padding: 20px; }
+.grid { display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+.monitor { position: relative; border: 3px solid #00ff41; background: #000; overflow: hidden; }
+video { width: 100%; height: auto; display: block; }
+.scanline { position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: rgba(0, 255, 65, 0.2); animation: scan 3s linear infinite; }
+@keyframes scan { from { top: 0; } to { top: 100%; } }
+.log-box { height: 200px; background: #1a1a1a; padding: 10px; overflow-y: scroll; font-size: 0.8rem; border: 1px solid #333; }
+.quiz-panel { background: #222; padding: 20px; border-radius: 10px; }
+button { background: #00ff41; color: black; border: none; padding: 10px; font-weight: bold; cursor: pointer; }
